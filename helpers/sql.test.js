@@ -24,5 +24,15 @@ describe('sqlForPartialUpdate', () => {
 
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toBeTruthy();
         expect(sqlForPartialUpdate(updateData, sqlToJs).values).toBeTruthy();
+    });
+
+    test('throws BadRequestError if no data passed in', () => {
+        const updateData = {};
+        const sqlToJs = {
+            numEmployees: "num_employees",
+            logoUrl: "logo_url",
+        };
+
+        expect(() => {sqlForPartialUpdate(updateData, sqlToJs)}).toThrow(BadRequestError);
     })
 })
