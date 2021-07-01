@@ -4,7 +4,7 @@ const { BadRequestError } = require("../expressError");
 *  and it will return an object containing {setCols: string with proper SQL keywords, 
 *  values: [data corresponding to those keywords]}
 *  
-*  E.G: {name: bob, numEmployees: 54} => {setCols: `name = $1, num_employees = $2`, values: ['bob', 54]}
+*  E.G: {name: bob, numEmployees: 54} => {setCols: `"name" = $1, "num_employees" = $2`, values: ['bob', 54]}
 */
 
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
