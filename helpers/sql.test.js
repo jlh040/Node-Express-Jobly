@@ -34,5 +34,16 @@ describe('sqlForPartialUpdate', () => {
         };
 
         expect(() => {sqlForPartialUpdate(updateData, sqlToJs)}).toThrow(BadRequestError);
+    });
+
+    test('it changes JS keywords to their SQL analog', () => {
+        const updateData = {numEmployees: 401, logoUrl: 'http://logo.com/1'};
+        const sqlToJs = {
+            numEmployees: "num_employees",
+            logoUrl: "logo_url",
+        };
+
+        expect(sqlForPartialUpdate(updateData, sqlToJs).setCols.includes('num_employees')).toBeTruthy();
+        expect(sqlForPartialUpdate(updateData, sqlToJs).setCols.includes('logo_url')).toBeTruthy();
     })
 })
