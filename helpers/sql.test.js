@@ -53,6 +53,5 @@ describe('sqlForPartialUpdate', () => {
 
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_change');
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_not_change');
-
-    })
-})
+    });
+});
