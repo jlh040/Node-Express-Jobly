@@ -45,5 +45,14 @@ describe('sqlForPartialUpdate', () => {
 
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols.includes('num_employees')).toBeTruthy();
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols.includes('logo_url')).toBeTruthy();
+    });
+
+    test('only changes JS keywords that are contained in sqlToJs', () => {
+        const updateData = {should_not_change: 1, shouldChange: 2};
+        const sqlToJs = {shouldChange: 'should_change'};
+
+        expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_change');
+        expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_not_change');
+
     })
 })
