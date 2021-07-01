@@ -13,5 +13,16 @@ describe('sqlForPartialUpdate', () => {
             logoUrl: "logo_url",
         };
         expect(sqlForPartialUpdate(updateData, sqlToJs)).toBeInstanceOf(Object);
+    });
+
+    test('returns an object with keys of "setCol" and "values"', () => {
+        const updateData = {numEmployees: 54};
+        const sqlToJs = {
+            numEmployees: "num_employees",
+            logoUrl: "logo_url",
+        };
+
+        expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toBeTruthy();
+        expect(sqlForPartialUpdate(updateData, sqlToJs).values).toBeTruthy();
     })
 })
