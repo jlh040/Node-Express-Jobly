@@ -27,4 +27,33 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-module.exports = { sqlForPartialUpdate };
+/* Pass in arguments referring to how we should search for companies, and returns a SQL statement which
+*  makes that exact search in the database.
+*
+* E.G: 
+*  {name = 'Dunder Mifflin', maxEmployees = 80} => 
+*  'SELECT * FROM companies WHERE name ILIKE '%Dunder Mifflin%' AND num_employees <= 80`
+*/
+
+function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
+  let baseQuery = 'SELECT * FROM companies WHERE'
+  let arrOfKeyAndVal = [];
+  // make array containing 'key = value' statements
+  for (let key in arguments[0]) {
+    arrOfKeyAndVal.push(`${key} = '${arguments[0][key]}'`);
+  }
+  // create array of sql clauses
+  arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {
+    if (clause.includes('name')) return `name ILIKE '%${name}%'`;
+    else if (clause.includes('minEmployees')) return `num_employees >= ${minEmployees}`;
+    else if (clause.includes('maxEmployees')) return `num_employees <= ${maxEmployees}`;
+  })
+
+  // attach either the concatenated string, or the single array item to the end of: SELECT * FROM companies WHERE
+  baseQuery += (arrOfKeyAndVal.length === 1 ? ` ${arrOfKeyAndVal[0]}` : ` ${arrOfKeyAndVal.join(' AND ')}`);
+  
+  // return query
+  return baseQuery;
+}
+
+module.exports = { sqlForPartialUpdate, sqlForFilteredCompanies };
