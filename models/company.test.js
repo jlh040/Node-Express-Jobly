@@ -164,6 +164,12 @@ describe("findAll", function () {
       }
     ])
   });
+
+  test('returns error if no results found', async () => {
+    expect(() => {
+      Company.findAll({name: 'some-nonexistent-name'});
+    }).toThrow(NotFoundError);
+  })
 });
 
 /************************************** get */
