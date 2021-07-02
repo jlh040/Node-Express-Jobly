@@ -36,8 +36,15 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 */
 
 function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
-  let baseQuery = 'SELECT * FROM companies WHERE'
+  let baseQuery = `SELECT handle,
+                          name,
+                          description,
+                          num_employees AS "numEmployees",
+                          logo_url AS "logoUrl"
+                  FROM companies
+                  WHERE`;
   let arrOfKeyAndVal = [];
+
   // make array containing 'key = value' statements
   for (let key in arguments[0]) {
     arrOfKeyAndVal.push(`${key} = '${arguments[0][key]}'`);
@@ -51,7 +58,7 @@ function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
 
   // attach either the concatenated string, or the single array item to the end of: SELECT * FROM companies WHERE
   baseQuery += (arrOfKeyAndVal.length === 1 ? ` ${arrOfKeyAndVal[0]}` : ` ${arrOfKeyAndVal.join(' AND ')}`);
-  
+
   // return query
   return baseQuery;
 }

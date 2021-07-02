@@ -2,7 +2,7 @@
 
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate } = require("../helpers/sql");
+const { sqlForPartialUpdate, sqlForFilteredCompanies } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -49,15 +49,22 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll() {
-    const companiesRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`);
+  static async findAll(name, minEmployees, maxEmployees) {
+    let query;
+    if (name === undefined && minEmployees === undefined && maxEmployees === undefined) {
+      query = `SELECT handle,
+                      name,
+                      description,
+                      num_employees AS "numEmployees",
+                      logo_url AS "logoUrl"
+              FROM companies
+              ORDER BY name`
+    } else {
+      query = sqlForFilteredCompanies(name, minEmployees, maxEmployees);
+    }
+    const companiesRes = await db.query(query);
+    if (!companiesRes.rows[0]) throw new NotFoundError('No companies found');
+
     return companiesRes.rows;
   }
 

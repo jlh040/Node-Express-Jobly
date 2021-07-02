@@ -166,9 +166,12 @@ describe("findAll", function () {
   });
 
   test('returns error if no results found', async () => {
-    expect(() => {
-      Company.findAll({name: 'some-nonexistent-name'});
-    }).toThrow(NotFoundError);
+    try {
+      await Company.findAll({name: "some-nonexistent-name"});
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
   })
 });
 
