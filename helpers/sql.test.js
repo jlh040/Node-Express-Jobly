@@ -1,7 +1,10 @@
+"use strict";
+
 process.env.NODE_ENV = 'test';
 
 const { BadRequestError } = require('../expressError');
 const { sqlForPartialUpdate } = require('./sql.js');
+const { sqlForFilteredCompanies } = require('./sql.js');
 
 /*******************************  Tests for sqlForPartialUpdate */
 
@@ -54,4 +57,34 @@ describe('sqlForPartialUpdate', () => {
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_change');
         expect(sqlForPartialUpdate(updateData, sqlToJs).setCols).toContain('should_not_change');
     });
+});
+
+describe('sqlForFilteredCompanies', () => {
+    test('should return a string', () => {
+        expect(sqlForFilteredCompanies('bob', 20, 50)).toBeInstanceOf(String);
+    });
+
+    test('returns correct query for only one argument', () => {
+        expect(sqlForFilteredCompanies('bob')).toEqual(`SELECT * FROM companies WHERE name ILIKE '%bob%'`);
+        expect(sqlForFilteredCompanies(minEmployees = 30)).toEqual(`SELECT * FROM companies WHERE num_employees >= 30`);
+        expect(sqlForFilteredCompanies(maxEmployees = 600)).toEqual(`SELECT * FROM companies WHERE num_employees <= 600`);
+    });
+
+    test('returns correct query for only two arguments', () => {
+        expect(sqlForFilteredCompanies('twitter', 350)).toEqual(`
+            SELECT * FROM companies WHERE name ILIKE '%twitter%'
+            AND num_employees >= 350`);
+
+        expect(sqlForFilteredCompanies(minEmployees = 60, maxEmployees = 900)).toEqual(`
+            SELECT * FROM companies WHERE num_employees >= 60
+            AND num_employees <= 900`);
+
+    });
+
+    test('returns correct query for all three arguments', () => {
+        expect(sqlForFilteredCompanies('facebook', 240, 910)).toEqual(`
+            SELECT * FROM companies WHERE name ILIKE '%facebook%'
+            AND num_employees >= 240 AND num_employees <= 910`);
+
+    })
 });

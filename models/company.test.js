@@ -206,3 +206,7 @@ describe("remove", function () {
     }
   });
 });
+
+describe('filterBy', () => {
+  
+})
