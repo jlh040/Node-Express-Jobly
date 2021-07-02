@@ -45,7 +45,9 @@ class Company {
   }
 
   /** Find all companies.
-   *
+   * Accepts optional paramaters which will filter our results.
+   * 
+   * 
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
