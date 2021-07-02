@@ -51,8 +51,9 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll(name, minEmployees, maxEmployees) {
+  static async findAll({name, minEmployees, maxEmployees}) {
     let query;
+    console.log(minEmployees)
     if (name === undefined && minEmployees === undefined && maxEmployees === undefined) {
       query = `SELECT handle,
                       name,

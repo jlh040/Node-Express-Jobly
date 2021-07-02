@@ -36,20 +36,13 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 */
 
 function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
-  let baseQuery = `SELECT handle,
-                          name,
-                          description,
-                          num_employees AS "numEmployees",
-                          logo_url AS "logoUrl"
-                  FROM companies
-                  WHERE`;
+  let baseQuery = `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE`;
   let arrOfKeyAndVal = [];
 
   // make array containing 'key = value' statements
   for (let key in arguments[0]) {
     if (arguments[0][key] !== undefined) arrOfKeyAndVal.push(`${key} = '${arguments[0][key]}'`);
   }
-  console.log(arrOfKeyAndVal)
 
   // create array of sql clauses
   arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {

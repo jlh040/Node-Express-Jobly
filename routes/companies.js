@@ -64,7 +64,7 @@ router.get("/", async function (req, res, next) {
       throw new BadRequestError(errs);
     }
 
-    const companies = await Company.findAll(req.query.name, req.query.minEmployees, req.query.maxEmployees);
+    const companies = await Company.findAll({name: req.query.name, minEmployees: req.query.minEmployees, maxEmployees: req.query.maxEmployees});
     return res.json({ companies });
   } catch (err) {
     return next(err);

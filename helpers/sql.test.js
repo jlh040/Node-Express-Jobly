@@ -67,19 +67,18 @@ describe('sqlForFilteredCompanies', () => {
     });
 
     test('returns correct query for only one argument', () => {
-        expect(sqlForFilteredCompanies({name: 'bob'})).toEqual(`SELECT * FROM companies WHERE name ILIKE '%bob%'`);
-        expect(sqlForFilteredCompanies({minEmployees: 30})).toEqual(`SELECT * FROM companies WHERE num_employees >= 30`);
-        expect(sqlForFilteredCompanies({maxEmployees: 600})).toEqual(`SELECT * FROM companies WHERE num_employees <= 600`);
+        expect(sqlForFilteredCompanies({name: 'bob'})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%bob%'`);
+        expect(sqlForFilteredCompanies({minEmployees: 30})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees >= 30`);
+        expect(sqlForFilteredCompanies({maxEmployees: 600})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees <= 600`);
     });
 
     test('returns correct query for only two arguments', () => {
-        expect(sqlForFilteredCompanies({name: 'twitter', minEmployees: 350})).toEqual(`SELECT * FROM companies WHERE name ILIKE '%twitter%' AND num_employees >= 350`);
-
-        expect(sqlForFilteredCompanies({minEmployees: 60, maxEmployees: 900})).toEqual(`SELECT * FROM companies WHERE num_employees >= 60 AND num_employees <= 900`);
+        expect(sqlForFilteredCompanies({name: 'twitter', minEmployees: 350})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%twitter%' AND num_employees >= 350`);
+        expect(sqlForFilteredCompanies({minEmployees: 60, maxEmployees: 900})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees >= 60 AND num_employees <= 900`);
 
     });
 
     test('returns correct query for all three arguments', () => {
-        expect(sqlForFilteredCompanies({name: 'facebook', minEmployees: 240, maxEmployees: 910})).toEqual(`SELECT * FROM companies WHERE name ILIKE '%facebook%' AND num_employees >= 240 AND num_employees <= 910`);
+        expect(sqlForFilteredCompanies({name: 'facebook', minEmployees: 240, maxEmployees: 910})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%facebook%' AND num_employees >= 240 AND num_employees <= 910`);
     })
 });
