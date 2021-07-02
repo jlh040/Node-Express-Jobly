@@ -163,18 +163,23 @@ describe("GET /companies", function () {
     })
   });
 
-  test('if minEmployees is greater than maxEmployees there should be an error', async () => {
+  test('if minEmployees is greater than maxEmployees return 400', async () => {
     const resp = await request(app).get('/companies/minEmployees=3&maxEmployees=1');
     expect(resp.statusCode).toBe(400);
   });
 
-  test('if minEmployees or maxEmployees is not a number, throw an error', async () => {
+  test('if minEmployees or maxEmployees is not a number return 400', async () => {
     const resp = await request(app).get('/companies/minEmployees=hello');
     expect(resp.statusCode).toBe(400);
 
     const resp2 = await request(app).get('/companies/maxEmployees=true');
     expect(resp2.statusCode).toBe(400);
   });
+
+  test('if invalid parameters are passed in the query string return 400', async () => {
+    const resp = await request(app).get('/companies?tuxedo=true&minEmployees=87');
+    expect(resp.statusCode).toBe(400);
+  })
 
   test("fails: test next() handler", async function () {
     // there's no normal failure event which will cause this route to fail ---
