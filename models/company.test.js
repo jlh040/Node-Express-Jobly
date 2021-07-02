@@ -85,6 +85,85 @@ describe("findAll", function () {
       },
     ]);
   });
+
+  test('filters based off of company name only', async () => {
+    let companies = await Company.findAll({name: 'C3'});
+    expect(companies).toEqual([
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      }
+    ])
+  });
+
+  test('filters based off of minEmployees only', async () => {
+    let companies = await Company.findAll({minEmployees: 2});
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      }
+    ])
+  });
+
+  test('filters based off of maxEmployees only', async () => {
+    let companies = await Company.findAll({maxEmployees: 1});
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      }
+    ])
+  });
+
+  test('filter based off of min and max employees', async () => {
+    let companies = await Company.findAll({minEmployees: 2, maxEmployees: 3});
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      }
+    ])
+  });
+
+  test('filter based off of name and min employees', async () => {
+    let companies = await Company.findAll({name: 'C3', minEmployees: 3});
+    expect(companies).toEqual([
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      }
+    ])
+  });
 });
 
 /************************************** get */
@@ -206,7 +285,3 @@ describe("remove", function () {
     }
   });
 });
-
-describe('filterBy', () => {
-  
-})
