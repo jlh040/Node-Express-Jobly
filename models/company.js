@@ -62,8 +62,9 @@ class Company {
               FROM companies
               ORDER BY name`
     } else {
-      query = sqlForFilteredCompanies(name, minEmployees, maxEmployees);
+      query = sqlForFilteredCompanies({name, minEmployees, maxEmployees});
     }
+
     const companiesRes = await db.query(query);
     if (!companiesRes.rows[0]) throw new NotFoundError('No companies found');
 

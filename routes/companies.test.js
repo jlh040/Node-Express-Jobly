@@ -149,7 +149,7 @@ describe("GET /companies", function () {
   });
 
   test('a user is able to search by minimum number of employees and name', async () => {
-    const resp = await request(app).get('/companies?minEmployees=3&name=C1');
+    const resp = await request(app).get('/companies?minEmployees=3&name=C3');
     expect(resp.body).toEqual({
       companies: [
         {
@@ -164,15 +164,15 @@ describe("GET /companies", function () {
   });
 
   test('if minEmployees is greater than maxEmployees return 400', async () => {
-    const resp = await request(app).get('/companies/minEmployees=3&maxEmployees=1');
+    const resp = await request(app).get('/companies?minEmployees=3&maxEmployees=1');
     expect(resp.statusCode).toBe(400);
   });
 
   test('if minEmployees or maxEmployees is not a number return 400', async () => {
-    const resp = await request(app).get('/companies/minEmployees=hello');
+    const resp = await request(app).get('/companies?minEmployees=hello');
     expect(resp.statusCode).toBe(400);
 
-    const resp2 = await request(app).get('/companies/maxEmployees=true');
+    const resp2 = await request(app).get('/companies?maxEmployees=true');
     expect(resp2.statusCode).toBe(400);
   });
 
