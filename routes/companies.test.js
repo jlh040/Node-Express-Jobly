@@ -44,6 +44,7 @@ describe("POST /companies", function () {
 
   test('a non-admin cannot create a company', async () => {
     try {
+      expect.assertions(2);
       const resp = await request(app)
         .post('/companies')
         .send(newCompany)
