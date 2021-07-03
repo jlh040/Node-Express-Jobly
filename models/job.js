@@ -39,6 +39,33 @@ class Job {
     return job;
   };
 
+  /** Find all jobs.
+   * Accepts optional paramaters which will filter our results.
+   * 
+   * 
+   * Returns [{ id, title, salary, equity, companyHandle }, ...]
+   * */
+
+  static async findAll({name, minEmployees, maxEmployees}) {
+    let query;
+    if (name === undefined && minEmployees === undefined && maxEmployees === undefined) {
+      query = `SELECT id,
+                      title,
+                      salary,
+                      equity,
+                      company_handle AS "companyHandle"
+              FROM jobs
+              ORDER BY title`
+    } else {
+      query = sqlForFilteredCompanies({name, minEmployees, maxEmployees});
+    }
+
+    const jobsRes = await db.query(query);
+    if (!jobsRes.rows[0]) throw new NotFoundError('No jobs found');
+
+    return jobsRes.rows;
+  }
+
 
 
 }
