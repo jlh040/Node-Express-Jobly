@@ -164,6 +164,8 @@ describe("GET /users", function () {
     const resp = await request(app)
       .get('/users')
       .set('authorization', `Bearer ${u2Token}`);
+    
+    expect(resp.statusCode).toBe(401);
   })
 
   test("an anonymous user cannot get all users", async function () {
