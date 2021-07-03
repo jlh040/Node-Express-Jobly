@@ -129,7 +129,7 @@ describe("POST /users", function () {
 /************************************** GET /users */
 
 describe("GET /users", function () {
-  test("works for users", async function () {
+  test("an admin can get all users", async function () {
     const resp = await request(app)
         .get("/users")
         .set("authorization", `Bearer ${u1Token}`);
@@ -160,7 +160,13 @@ describe("GET /users", function () {
     });
   });
 
-  test("unauth for anon", async function () {
+  test('a non-admin cannot get all users', async () => {
+    const resp = await request(app)
+      .get('/users')
+      .set('authorization', `Bearer ${u2Token}`);
+  })
+
+  test("an anonymous user cannot get all users", async function () {
     const resp = await request(app)
         .get("/users");
     expect(resp.statusCode).toEqual(401);
