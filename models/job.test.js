@@ -97,4 +97,19 @@ describe('find all jobs', () => {
       }
     ])
   });
+
+  test('filters based off of minSalary', async () => {
+    let jobs = await Job.findAll({minSalary: 140000});
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "c3Job",
+        salary: 140000,
+        equity: 0.985,
+        companyHandle: 'c3'
+      }
+    ])
+  });
+
+  
 });
