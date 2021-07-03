@@ -282,7 +282,16 @@ describe('remove', () => {
     const res = await db.query(
         `SELECT title FROM jobs WHERE id = $1`, [id]);
     expect(res.rows.length).toBe(0)
-  })
+  });
+
+  test("not found if no such job", async function () {
+    try {
+      await Job.remove(-1);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
 })
 
 
