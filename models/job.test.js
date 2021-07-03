@@ -197,15 +197,15 @@ describe('get', () => {
 /************************************** update */
 
 describe('update', () => {
-  const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
-  const id = resp.rows[0].id;
-  const updateData = {
-    title: 'newTitle',
-    salary: 55245,
-    equity: 0.391
-  };
-
   test("works", async function () {
+    const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+    const id = resp.rows[0].id;
+    const updateData = {
+      title: 'newTitle',
+      salary: 55245,
+      equity: 0.391
+    };
+
     let job = await Job.update(id, updateData);
     expect(job).toEqual({
       id,
@@ -226,12 +226,15 @@ describe('update', () => {
     }]);
   });
 
-  test("works if we have null fields", async function () {
+  test("works if we have null fields", async () => {
+    const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+    const id = resp.rows[0].id;
     const updateData2 = {
       title: 'newTitle',
       salary: null,
       equity: null
     };
+
     let job = await Job.update(id, updateData2);
     expect(job).toEqual({
       id,
@@ -253,6 +256,12 @@ describe('update', () => {
   });
 
   test("not found if no such job", async function () {
+    const updateData = {
+      title: 'newTitle',
+      salary: 55245,
+      equity: 0.391
+    };
+
     try {
       await Job.update("nothing", updateData);
       fail();
@@ -262,6 +271,9 @@ describe('update', () => {
   });
 
   test("bad request with no data", async function () {
+    const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+    const id = resp.rows[0].id;
+
     try {
       await Job.update(id, {});
       fail();
@@ -274,10 +286,10 @@ describe('update', () => {
 /************************************** remove */
 
 describe('remove', () => {
-  const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
-  const id = resp.rows[0].id;
-
   test('works', async () => {
+    const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+    const id = resp.rows[0].id;
+
     await Job.remove(id);
     const res = await db.query(
         `SELECT title FROM jobs WHERE id = $1`, [id]);
@@ -292,7 +304,4 @@ describe('remove', () => {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
-})
-
-
-
+});
