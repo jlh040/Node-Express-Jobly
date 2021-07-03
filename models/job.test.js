@@ -15,9 +15,9 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-/************************************** create */
+/************************************** create method */
 
-describe('create a new job', () => {
+describe('create', () => {
   const newJob = {
     title: 'somejob',
     salary: 450000,
@@ -46,8 +46,8 @@ describe('create a new job', () => {
 
   test("bad request with dupe", async function () {
     try {
-      await Company.create(newCompany);
-      await Company.create(newCompany);
+      await Job.create(newJob);
+      await Job.create(newJob);
       fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
@@ -55,9 +55,9 @@ describe('create a new job', () => {
   });
 });
 
-/************************************** findAll */
+/************************************** findAll method */
 
-describe('find all jobs', () => {
+describe('findAll', () => {
   test("works: no filter", async function () {
     let jobs = await Job.findAll({});
     expect(jobs).toEqual([
@@ -167,12 +167,12 @@ describe('find all jobs', () => {
   });
 });
 
-/************************************** get */
+/************************************** get method */
 
-describe('get a particular job', () => {
+describe('get', () => {
   test('works', async () => {
     const resp = await db.query(`SELECT id FROM jobs where title = 'c1Job'`);
-    let job = await Job.get(resp.rows[0].id);
+    const job = await Job.get(resp.rows[0].id);
     expect(job).toEqual({
       id: resp.rows[0].id,
       title: "c1Job",
@@ -192,5 +192,43 @@ describe('get a particular job', () => {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
+});
+
+/************************************** update */
+
+describe('update', () => {
+  const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+  const id = resp.rows[0].id;
+  const updateData = {
+    title: 'newTitle',
+    salary: 55245,
+    equity: 0.391
+  };
+
+  test("works", async function () {
+    let job = await Job.update(id, updateData);
+    expect(job).toEqual({
+      id,
+      companyHandle: 'c1',
+      ...updateData,
+    });
+
+    const result = await db.query(
+          `SELECT id, title, salary, equity, company_handle
+           FROM jobs
+           WHERE id = $1`, [id]);
+    expect(result.rows).toEqual([{
+      id,
+      title: "newTitle",
+      salary: 55245,
+      equity: 0.391,
+      company_handle: "c1",
+    }]);
+  });
+  
+
+
 })
+
+
 
