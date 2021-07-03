@@ -246,7 +246,7 @@ describe("GET /users/:username", function () {
 /************************************** PATCH /users/:username */
 
 describe("PATCH /users/:username", () => {
-  test("works for users", async function () {
+  test("an admin can update a user", async function () {
     const resp = await request(app)
         .patch(`/users/u1`)
         .send({
@@ -264,7 +264,37 @@ describe("PATCH /users/:username", () => {
     });
   });
 
-  test("unauth for anon", async function () {
+  test('a non-admin cannot update another user', async () => {
+    const resp = await request(app)
+        .patch('/users/u1')
+        .send({
+          firstName: "Jean"
+        })
+        .set('authorization', `Bearer ${u2Token}`);
+    
+    expect(resp.statusCode).toBe(401);
+  });
+
+  test('a non-admin can update themselves', async () => {
+    const resp = await request(app)
+        .patch('/users/u2')
+        .send({
+          firstName: 'Guy'
+        })
+        .set('authorization', `Bearer ${u2Token}`);
+
+    expect(resp.body).toEqual({
+      user: {
+        username: "u2",
+        firstName: "Guy",
+        lastName: "U2L",
+        email: "user2@user.com",
+        isAdmin: false
+      }
+    });
+  })
+
+  test("an anonymous user cannot update anyone", async function () {
     const resp = await request(app)
         .patch(`/users/u1`)
         .send({
