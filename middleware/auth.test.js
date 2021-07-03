@@ -58,17 +58,37 @@ describe("authenticateJWT", function () {
 
 
 describe("ensureLoggedIn", function () {
-  test("works", function () {
+  test("no errors raised if user is an admin", function () {
     expect.assertions(1);
-    const req = {};
-    const res = { locals: { user: { username: "test", is_admin: false } } };
+    const req = {originalUrl: '/randomUrl'};
+    const res = { locals: { user: { username: "test", isAdmin: true } } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
     ensureLoggedIn(req, res, next);
   });
 
-  test("unauth if no login", function () {
+  test('error raised if user is not an admin and you are not accessing your own user route', function() {
+    expect.assertions(1);
+    const req = {originalUrl: '/randomUrl'}
+    const res = {locals: {user: { username: 'test', isAdmin: false }}};
+    const next = function(err) {
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+    };
+    ensureLoggedIn(req, res, next);
+  });
+
+  test('no error raised if user is not an admin and user is accessing your own user route', function() {
+    expect.assertions(1);
+    const req = {originalUrl: '/users/testUser'}
+    const res = {locals: {user: { username: 'testUser', isAdmin: false }}};
+    const next = function(err) {
+      expect(err).toBeFalsy();
+    };
+    ensureLoggedIn(req, res, next);
+  })
+
+  test("error raised if user is anonymous", function () {
     expect.assertions(1);
     const req = {};
     const res = { locals: {} };

@@ -38,6 +38,9 @@ function ensureLoggedIn(req, res, next) {
     if (!res.locals.user) {
       throw new UnauthorizedError();
     }
+    else if (!res.locals.user.isAdmin && req.originalUrl.includes('users') && req.originalUrl.includes(res.locals.user.username)) {
+      return next();
+    }
     else if (!res.locals.user.isAdmin) {
       throw new UnauthorizedError();
     }
