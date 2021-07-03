@@ -225,6 +225,32 @@ describe('update', () => {
       company_handle: "c1",
     }]);
   });
+
+  test("works if we have null fields", async function () {
+    const updateData2 = {
+      title: 'newTitle',
+      salary: null,
+      equity: null
+    };
+    let job = await Job.update(id, updateData2);
+    expect(job).toEqual({
+      id,
+      companyHandle: 'c1',
+      ...updateData2,
+    });
+
+    const result = await db.query(
+          `SELECT id, title, salary, equity, company_handle
+           FROM jobs
+           WHERE id = $1`, [id]);
+    expect(result.rows).toEqual([{
+      id,
+      title: "newTitle",
+      salary: null,
+      equity: null,
+      company_handle: "c1",
+    }]);
+  });
   
 
 
