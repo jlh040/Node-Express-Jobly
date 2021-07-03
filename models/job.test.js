@@ -157,5 +157,14 @@ describe('find all jobs', () => {
     ])
   });
 
+  test('returns error if no results found', async () => {
+    try {
+      await Job.findAll({minSalary: 900000, hasEquity: true});
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
 
 });
