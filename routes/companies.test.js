@@ -12,6 +12,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -30,7 +31,7 @@ describe("POST /companies", function () {
     numEmployees: 10,
   };
 
-  test("ok for users", async function () {
+  test("an admin can create a company", async function () {
     const resp = await request(app)
         .post("/companies")
         .send(newCompany)
@@ -39,6 +40,19 @@ describe("POST /companies", function () {
     expect(resp.body).toEqual({
       company: newCompany,
     });
+  });
+
+  test('a non-admin cannot create a company', async () => {
+    try {
+      const resp = await request(app)
+        .post('/companies')
+        .send(newCompany)
+        .set("authorization", `Bearer ${u2Token}`);
+    }
+    catch(err) {
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+      expect(resp.statusCode).toBe(401);
+    }
   });
 
   test("bad request with missing data", async function () {
@@ -62,18 +76,6 @@ describe("POST /companies", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
   });
-
-  test('Unauthorized users cannot create a company', async () => {
-    try {
-      const resp = await request(app)
-        .post('/companies')
-        .send(newCompany);
-    }
-    catch(err) {
-      expect(err instanceof UnauthorizedError).toBeTruthy();
-      expect(resp.statusCode).toBe(401);
-    }
-  })
 });
 
 /************************************** GET /companies */
@@ -257,7 +259,7 @@ describe("GET /companies/:handle", function () {
 /************************************** PATCH /companies/:handle */
 
 describe("PATCH /companies/:handle", function () {
-  test("works for users", async function () {
+  test("an admin can update a company", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
         .send({
@@ -273,6 +275,16 @@ describe("PATCH /companies/:handle", function () {
         logoUrl: "http://c1.img",
       },
     });
+  });
+
+  test("a non-admin cannot update a company", async function () {
+    const resp = await request(app)
+        .patch(`/companies/c1`)
+        .send({
+          name: "C1-new",
+        })
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(401);
   });
 
   test("unauth for anon", async function () {
@@ -318,11 +330,18 @@ describe("PATCH /companies/:handle", function () {
 /************************************** DELETE /companies/:handle */
 
 describe("DELETE /companies/:handle", function () {
-  test("works for users", async function () {
+  test("an admin can delete a company", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`)
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.body).toEqual({ deleted: "c1" });
+  });
+
+  test("a non-admin cannot delete a company", async function () {
+    const resp = await request(app)
+        .delete(`/companies/c1`)
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(401);
   });
 
   test("unauth for anon", async function () {
