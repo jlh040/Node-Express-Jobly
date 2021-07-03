@@ -65,7 +65,7 @@ describe('find all jobs', () => {
         id: expect.any(Number),
         title: "c1Job",
         salary: 30000,
-        equity: 0.45,
+        equity: 0,
         companyHandle: 'c1'
       },
       {
@@ -98,7 +98,7 @@ describe('find all jobs', () => {
     ])
   });
 
-  test('filters based off of minSalary', async () => {
+  test('filters based off of minSalary only', async () => {
     let jobs = await Job.findAll({minSalary: 140000});
     expect(jobs).toEqual([
       {
@@ -111,5 +111,25 @@ describe('find all jobs', () => {
     ])
   });
 
-  
+  test('filters based off of hasEquity only', async () => {
+    let jobs = await Job.findAll({hasEquity: true});
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "c2Job",
+        salary: 50000,
+        equity: 0.765,
+        companyHandle: 'c2'
+      },
+      {
+        id: expect.any(Number),
+        title: "c3Job",
+        salary: 140000,
+        equity: 0.985,
+        companyHandle: 'c3'
+      }
+    ])
+  });
+
+
 });
