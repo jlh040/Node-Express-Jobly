@@ -4,6 +4,7 @@ const request = require("supertest");
 
 const db = require("../db");
 const app = require("../app");
+const { UnauthorizedError } = require('../expressError');
 
 const {
   commonBeforeAll,
@@ -61,6 +62,17 @@ describe("POST /companies", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
   });
+
+  test('Unauthorized users cannot create a company', async () => {
+    try {
+      await request(app)
+        .post('/companies')
+        .send(newCompany);
+    }
+    catch(err) {
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+    }
+  })
 });
 
 /************************************** GET /companies */
