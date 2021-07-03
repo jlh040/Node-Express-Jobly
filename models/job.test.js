@@ -269,9 +269,20 @@ describe('update', () => {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
-  
+});
 
+/************************************** remove */
 
+describe('remove', () => {
+  const resp = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+  const id = resp.rows[0].id;
+
+  test('works', async () => {
+    await Job.remove(id);
+    const res = await db.query(
+        `SELECT title FROM jobs WHERE id = $1`, [id]);
+    expect(res.rows.length).toBe(0)
+  })
 })
 
 
