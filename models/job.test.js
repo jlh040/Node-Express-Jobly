@@ -169,16 +169,28 @@ describe('find all jobs', () => {
 
 /************************************** get */
 
-describe('get a particular company', () => {
+describe('get a particular job', () => {
   test('works', async () => {
-    let job = await Job.get(19);
+    const resp = await db.query(`SELECT id FROM jobs where title = 'c1Job'`);
+    let job = await Job.get(resp.rows[0].id);
     expect(job).toEqual({
-      id: 19,
+      id: resp.rows[0].id,
       title: "c1Job",
       salary: 30000,
       equity: 0,
       companyHandle: 'c1'
     });
-  })
+  });
+
+  test('not found if no such job', async () => {
+    expect.assertions(1);
+    try {
+      await Job.get(-54);
+      fail();
+    }
+    catch(err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
 })
 
