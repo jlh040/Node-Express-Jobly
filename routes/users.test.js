@@ -347,14 +347,30 @@ describe("PATCH /users/:username", () => {
 /************************************** DELETE /users/:username */
 
 describe("DELETE /users/:username", function () {
-  test("works for users", async function () {
+  test("an admin can delete a user", async function () {
     const resp = await request(app)
         .delete(`/users/u1`)
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.body).toEqual({ deleted: "u1" });
   });
 
-  test("unauth for anon", async function () {
+  test('a non-admin cannot delete another user', async () => {
+    const resp = await request(app)
+        .delete('/users/u3')
+        .set('authorization', `Bearer ${u2Token}`);
+    
+    expect(resp.statusCode).toBe(401);
+  });
+
+  test('a non-admin can delete themselves', async () => {
+    const resp = await request(app)
+        .delete('/users/u2')
+        .set('authorization', `Bearer ${u2Token}`);
+
+    expect(resp.body).toEqual({ deleted: "u2"} )
+  })
+
+  test("an anonymous user cannot delete anyone", async function () {
     const resp = await request(app)
         .delete(`/users/u1`);
     expect(resp.statusCode).toEqual(401);
