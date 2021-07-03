@@ -260,6 +260,15 @@ describe('update', () => {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
+
+  test("bad request with no data", async function () {
+    try {
+      await Job.update(id, {});
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
   
 
 
