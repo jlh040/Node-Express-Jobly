@@ -21,7 +21,7 @@ describe('create', () => {
   const newJob = {
     title: 'somejob',
     salary: 450000,
-    equity: 0.8,
+    equity: '0.8',
     companyHandle: 'c1'
   }
 
@@ -38,8 +38,8 @@ describe('create', () => {
         id: expect.any(Number),
         title: "somejob",
         salary: 450000,
-        equity: 0.8,
-        companyHandle: "c1",
+        equity: '0.8',
+        company_handle: "c1",
       },
     ]);
   });
