@@ -65,12 +65,13 @@ describe("POST /companies", function () {
 
   test('Unauthorized users cannot create a company', async () => {
     try {
-      await request(app)
+      const resp = await request(app)
         .post('/companies')
         .send(newCompany);
     }
     catch(err) {
       expect(err instanceof UnauthorizedError).toBeTruthy();
+      expect(resp.statusCode).toBe(401);
     }
   })
 });
