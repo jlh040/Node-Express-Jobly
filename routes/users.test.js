@@ -12,6 +12,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -22,7 +23,7 @@ afterAll(commonAfterAll);
 /************************************** POST /users */
 
 describe("POST /users", function () {
-  test("works for users: create non-admin", async function () {
+  test("works for admin: create non-admin", async function () {
     const resp = await request(app)
         .post("/users")
         .send({
@@ -46,7 +47,7 @@ describe("POST /users", function () {
     });
   });
 
-  test("works for users: create admin", async function () {
+  test("works for admin: create admin", async function () {
     const resp = await request(app)
         .post("/users")
         .send({
@@ -70,7 +71,7 @@ describe("POST /users", function () {
     });
   });
 
-  test("unauth for anon", async function () {
+  test("an anonymous user cannot create a user", async function () {
     const resp = await request(app)
         .post("/users")
         .send({
@@ -81,6 +82,21 @@ describe("POST /users", function () {
           email: "new@email.com",
           isAdmin: true,
         });
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("an non-admin cannot create a user", async function () {
+    const resp = await request(app)
+        .post("/users")
+        .send({
+          username: "u-new",
+          firstName: "First-new",
+          lastName: "Last-newL",
+          password: "password-new",
+          email: "new@email.com",
+          isAdmin: true,
+        })
+        .set('authorization', `Bearer ${u2Token}`);
     expect(resp.statusCode).toEqual(401);
   });
 
