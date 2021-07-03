@@ -18,7 +18,39 @@ afterAll(commonAfterAll);
 /************************************** create */
 
 describe('create a new job', () => {
+  const newJob = {
+    title: 'somejob',
+    salary: 450000,
+    equity: 0.8,
+    companyHandle: 'c1'
+  }
+
   test('works', async () => {
-    expect(1).toBe(1);
-  })
+    let job = await Job.create(newJob);
+    expect(job).toEqual(newJob);
+
+    const result = await db.query(
+      `SELECT id, title, salary, equity, company_handle
+       FROM jobs
+       WHERE title = 'somejob'`);
+    expect(result.rows).toEqual([
+      {
+        id: expect.any(Number),
+        title: "somejob",
+        salary: 450000,
+        equity: 0.8,
+        companyHandle: "c1",
+      },
+    ]);
+  });
+
+  test("bad request with dupe", async function () {
+    try {
+      await Company.create(newCompany);
+      await Company.create(newCompany);
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
 })
