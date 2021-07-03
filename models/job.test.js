@@ -211,6 +211,7 @@ describe('update', () => {
       id,
       companyHandle: 'c1',
       ...updateData,
+      equity: '0.391'
     });
 
     const result = await db.query(
@@ -221,7 +222,7 @@ describe('update', () => {
       id,
       title: "newTitle",
       salary: 55245,
-      equity: 0.391,
+      equity: '0.391',
       company_handle: "c1",
     }]);
   });
@@ -263,7 +264,7 @@ describe('update', () => {
     };
 
     try {
-      await Job.update("nothing", updateData);
+      await Job.update(-1, updateData);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
