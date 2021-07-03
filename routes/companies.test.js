@@ -96,6 +96,19 @@ describe("GET /companies", function () {
     });
   });
 
+  test('an anonymous user can search for a particular company', async () => {
+    const resp = await request(app).get('/companies/c1');
+    expect(resp.body).toEqual({
+      company: {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      }
+    })
+  })
+
   test('a user is able to search by company name', async () => {
     const resp = await request(app).get('/companies?name=C1')
     expect(resp.body).toEqual({
