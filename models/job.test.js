@@ -53,4 +53,35 @@ describe('create a new job', () => {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
+});
+
+/************************************** findAll */
+
+describe('find all jobs', () => {
+  test("works: no filter", async function () {
+    let jobs = await Job.findAll({});
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "c1Job",
+        salary: 30000,
+        equity: 0.45,
+        companyHandle: 'c1'
+      },
+      {
+        id: expect.any(Number),
+        title: "c2Job",
+        salary: 50000,
+        equity: 0.765,
+        companyHandle: 'c2'
+      },
+      {
+        id: expect.any(Number),
+        title: "c3Job",
+        salary: 140000,
+        equity: 0.985,
+        companyHandle: 'c3'
+      }
+    ]);
+  });
 })
