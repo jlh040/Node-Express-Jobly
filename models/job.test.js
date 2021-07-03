@@ -84,4 +84,17 @@ describe('find all jobs', () => {
       }
     ]);
   });
-})
+
+  test('filters based off of job title only', async () => {
+    let jobs = await Job.findAll({title: 'c2Job'});
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "c2Job",
+        salary: 50000,
+        equity: 0.765,
+        companyHandle: 'c2'
+      }
+    ])
+  });
+});
