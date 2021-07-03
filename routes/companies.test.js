@@ -66,7 +66,7 @@ describe("POST /companies", function () {
 /************************************** GET /companies */
 
 describe("GET /companies", function () {
-  test("ok for anon", async function () {
+  test("an anonymous user can get all companies", async function () {
     const resp = await request(app).get("/companies");
     expect(resp.body).toEqual({
       companies:
