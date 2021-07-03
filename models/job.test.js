@@ -251,6 +251,15 @@ describe('update', () => {
       company_handle: "c1",
     }]);
   });
+
+  test("not found if no such job", async function () {
+    try {
+      await Job.update("nothing", updateData);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
   
 
 
