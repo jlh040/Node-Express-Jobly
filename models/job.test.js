@@ -165,6 +165,20 @@ describe('find all jobs', () => {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
-
-
 });
+
+/************************************** get */
+
+describe('get a particular company', () => {
+  test('works', async () => {
+    let job = await Job.get(19);
+    expect(job).toEqual({
+      id: 19,
+      title: "c1Job",
+      salary: 30000,
+      equity: 0,
+      companyHandle: 'c1'
+    });
+  })
+})
+
