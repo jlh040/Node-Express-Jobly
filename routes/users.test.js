@@ -189,22 +189,47 @@ describe("GET /users", function () {
 /************************************** GET /users/:username */
 
 describe("GET /users/:username", function () {
-  test("works for users", async function () {
+  test("an admin can get information about a user", async function () {
     const resp = await request(app)
-        .get(`/users/u1`)
+        .get(`/users/u3`)
         .set("authorization", `Bearer ${u1Token}`);
+
     expect(resp.body).toEqual({
       user: {
-        username: "u1",
-        firstName: "U1F",
-        lastName: "U1L",
-        email: "user1@user.com",
+        username: "u3",
+        firstName: "U3F",
+        lastName: "U3L",
+        email: "user3@user.com",
         isAdmin: false,
       },
     });
   });
 
-  test("unauth for anon", async function () {
+  test('a non-admin cannot get information about another user', async () => {
+    const resp = await request(app)
+        .get('/users/u3')
+        .set('authorization', `Bearer ${u2Token}`);
+
+    expect(resp.statusCode).toBe(401);
+  });
+
+  test('a non admin can get information about themselves', async () => {
+    const resp = await request(app)
+        .get('/users/u2')
+        .set('authorization', `Bearer ${u2Token}`);
+
+    expect(resp.body).toEqual({
+      user: {
+        username: "u2",
+        firstName: "U2F",
+        lastName: "U2L",
+        email: "user2@user.com",
+        isAdmin: false,
+      }
+    })
+  })
+
+  test("an anonymous user cannot get information about anyone", async function () {
     const resp = await request(app)
         .get(`/users/u1`);
     expect(resp.statusCode).toEqual(401);
