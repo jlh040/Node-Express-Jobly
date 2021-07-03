@@ -177,7 +177,7 @@ describe('get', () => {
       id: resp.rows[0].id,
       title: "c1Job",
       salary: 30000,
-      equity: 0,
+      equity: '0',
       companyHandle: 'c1'
     });
   });
