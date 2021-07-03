@@ -43,17 +43,11 @@ describe("POST /companies", function () {
   });
 
   test('a non-admin cannot create a company', async () => {
-    try {
-      expect.assertions(2);
-      const resp = await request(app)
-        .post('/companies')
-        .send(newCompany)
-        .set("authorization", `Bearer ${u2Token}`);
-    }
-    catch(err) {
-      expect(err instanceof UnauthorizedError).toBeTruthy();
-      expect(resp.statusCode).toBe(401);
-    }
+    const resp = await request(app)
+      .post('/companies')
+      .send(newCompany)
+      .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toBe(401);
   });
 
   test("bad request with missing data", async function () {
@@ -288,7 +282,7 @@ describe("PATCH /companies/:handle", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("unauth for anon", async function () {
+  test("an anonymous user cannot update a company", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
         .send({

@@ -58,7 +58,6 @@ router.get("/", async function (req, res, next) {
     if (req.query.minEmployees > req.query.maxEmployees) throw new BadRequestError('Minimum cannot be greater than maximum');
     
     const validator = jsonschema.validate(req.query, findCompanySchema);
-    console.log(req.query)
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
