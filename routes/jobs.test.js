@@ -317,5 +317,18 @@ describe('PATCH /jobs/:id', () => {
         expect(resp.statusCode).toEqual(400);
     });
 
+    test("bad request on companyHandle change attempt", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .patch(`/jobs/${id}`)
+            .send({
+              companyHandle: 'newHandle',
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(400);
+    });
+
     
 })
