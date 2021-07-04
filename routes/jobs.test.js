@@ -378,8 +378,8 @@ describe('DELETE /jobs/:id', () => {
 
     test("not found for no such job", async function () {
         const resp = await request(app)
-            .delete(`/jobs/4002003001001`)
-            .set("authorization", `Bearer ${u2Token}`);
+            .delete(`/jobs/58372834`)
+            .set("authorization", `Bearer ${u1Token}`);
         expect(resp.statusCode).toEqual(404);
     });
 });
