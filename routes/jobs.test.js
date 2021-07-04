@@ -109,22 +109,6 @@ describe('GET /jobs', () => {
         });
     });
 
-    test('an anonymous user can search for a particular job', async () => {
-        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`);
-        const id = result.rows[0].id;
-
-        const resp = await request(app).get(`/jobs/${id}`);
-        expect(resp.body).toEqual({
-          job: {
-            id,
-            title: "c1Job",
-            salary: 20000,
-            equity: '0',
-            companyHandle: "c1"
-          }
-        });
-    });
-
     // test('a user is able to search by job title', async () => {
     //     const resp = await request(app).get('/jobs?title=c2Job')
     //     expect(resp.body).toEqual({
@@ -242,11 +226,11 @@ describe('GET /jobs/:id', () => {
     test("works for anon", async function () {
         const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
         const id = result.rows[0].id;
-        
+
         const resp = await request(app).get(`/jobs/${id}`);
         expect(resp.body).toEqual({
           job: {
-            id: expect.any(Number),
+            id,
             title: "c1Job",
             salary: 20000,
             equity: '0',
