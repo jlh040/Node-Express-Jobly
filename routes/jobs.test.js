@@ -44,4 +44,12 @@ describe('POST /jobs', function() {
           },
         });
     });
+
+    test('a non-admin cannot create a job', async () => {
+        const resp = await request(app)
+          .post('/jobs')
+          .send(newJob)
+          .set("authorization", `Bearer ${u2Token}`);
+        expect(resp.statusCode).toBe(401);
+      });
 })
