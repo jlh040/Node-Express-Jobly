@@ -199,6 +199,21 @@ describe('GET /jobs', () => {
     //     })
     // });
 
+    // test('a user is able to search by title and minSalary', async () => {
+    //     const resp = await request(app).get('/jobs?title=c3Job&minSalary=70000')
+    //     expect(resp.body).toEqual({
+    //       jobs: [
+    //         {
+    //             id: expect.any(Number),
+    //             title: "c3Job",
+    //             salary: 80000,
+    //             equity: '0.97',
+    //             companyHandle: "c3",
+    //         }
+    //     ]
+    //     });
+    // });
+
 
 
 
