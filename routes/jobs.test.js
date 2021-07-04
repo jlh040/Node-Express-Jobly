@@ -366,5 +366,14 @@ describe('DELETE /jobs/:id', () => {
             .set("authorization", `Bearer ${u2Token}`);
         expect(resp.statusCode).toEqual(401);
     });
+
+    test("an anonymous user cannot delete a job", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .delete(`/jobs/${id}`)
+        expect(resp.statusCode).toEqual(401);
+    });
 })
 
