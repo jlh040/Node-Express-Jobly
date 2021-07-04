@@ -51,5 +51,18 @@ describe('POST /jobs', function() {
           .send(newJob)
           .set("authorization", `Bearer ${u2Token}`);
         expect(resp.statusCode).toBe(401);
+    });
+
+    test("bad request with missing data", async function () {
+        const resp = await request(app)
+            .post("/jobs")
+            .send({
+              title: "ajob",
+              salary: 25000,
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(400);
       });
+
+
 })
