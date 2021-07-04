@@ -123,16 +123,4 @@ router.delete("/:id", ensureLoggedIn, async function (req, res, next) {
 });
 
 
-
-
-
- 
-
-
- 
-
-
-
-
-
- module.exports = router;
+module.exports = router;

@@ -58,4 +58,29 @@ function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
   return baseQuery;
 }
 
-module.exports = { sqlForPartialUpdate, sqlForFilteredCompanies };
+function sqlForFilteredJobs({title, minSalary, hasEquity}) {
+  let baseQuery = `SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE`;
+  let arrOfKeyAndVal = [];
+
+  // Make array containing 'key = value' statements.
+  // If hasEquity is either undefined, or false, we are not filtering by equity, so
+  // we will not put it in our arr of " key = 'value' " statements
+  for (let key in arguments[0]) {
+    if (arguments[0][key] !== undefined && arguments[0][key] !== false) arrOfKeyAndVal.push(`${key} = '${arguments[0][key]}'`);
+  }
+
+  // create array of sql clauses
+  arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {
+    if (clause.includes('title')) return `title ILIKE '%${title}%'`;
+    else if (clause.includes('minSalary')) return `salary >= ${minSalary}`;
+    else if (clause.includes('hasEquity')) return `equity > 0`;
+  });
+
+  // attach either the concatenated string, or the single array item to the end of: SELECT * FROM jobs WHERE
+  baseQuery += (arrOfKeyAndVal.length === 1 ? ` ${arrOfKeyAndVal[0]}` : ` ${arrOfKeyAndVal.join(' AND ')}`);
+
+  // return query
+  return baseQuery;
+}
+
+module.exports = { sqlForPartialUpdate, sqlForFilteredCompanies, sqlForFilteredJobs };
