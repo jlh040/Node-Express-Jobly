@@ -243,4 +243,29 @@ describe('GET /jobs/:id', () => {
         const resp = await request(app).get(`/jobs/99000`);
         expect(resp.statusCode).toEqual(404);
     });
+});
+
+/*************************************** PATCH /jobs/:id */
+
+describe('PATCH /jobs/:id', () => {
+    test("an admin can update a job", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .patch(`/jobs/${id}`)
+            .send({
+              equity: 0.34,
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.body).toEqual({
+          job: {
+            id,
+            title: "c1Job",
+            salary: 20000,
+            equity: '0.34',
+            companyHandle: "c1",
+          },
+        });
+      });
 })
