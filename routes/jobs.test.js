@@ -74,4 +74,45 @@ describe('POST /jobs', function() {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
     });
+});
+
+/************************************** GET /jobs */
+
+describe('GET /jobs', () => {
+    test("an anonymous user can get all jobs", async function () {
+        const resp = await request(app).get("/jobs");
+        expect(resp.body).toEqual({
+          jobs:
+            [
+                {
+                  id: expect.any(Number),
+                  title: "c1Job",
+                  salary: 20000,
+                  equity: '0',
+                  companyHandle: "c1",
+                },
+                {
+                  id: expect.any(Number),
+                  title: "c2Job",
+                  salary: 50000,
+                  equity: '0.75',
+                  companyHandle: "c2",
+                },
+                {
+                  id: expect.any(Number),
+                  title: "c3Job",
+                  salary: 80000,
+                  equity: '0.97',
+                  companyHandle: "c3",
+                },
+            ]
+        });
+    });
+
+
+
+
+
+
+
 })
