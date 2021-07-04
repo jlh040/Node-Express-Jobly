@@ -356,5 +356,15 @@ describe('DELETE /jobs/:id', () => {
             .set("authorization", `Bearer ${u1Token}`);
         expect(resp.body).toEqual({ deleted: id });
     });
+
+    test("a non-admin cannot delete a job", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .delete(`/jobs/${id}`)
+            .set("authorization", `Bearer ${u2Token}`);
+        expect(resp.statusCode).toEqual(401);
+    });
 })
 
