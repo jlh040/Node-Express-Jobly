@@ -109,6 +109,22 @@ describe('GET /jobs', () => {
         });
     });
 
+    test('an anonymous user can search for a particular job', async () => {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`);
+        const id = result.rows[0].id;
+
+        const resp = await request(app).get(`/jobs/${id}`);
+        expect(resp.body).toEqual({
+          job: {
+            id,
+            title: "c1Job",
+            salary: 20000,
+            equity: '0',
+            companyHandle: "c1"
+          }
+        });
+    });
+
 
 
 
