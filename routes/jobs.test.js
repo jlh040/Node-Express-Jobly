@@ -203,11 +203,6 @@ describe('GET /jobs', () => {
         expect(resp.statusCode).toBe(400);
     });
 
-    test('if title is not a string return 400', async () => {
-        const resp = await request(app).get('/jobs?title=600');
-        expect(resp.statusCode).toBe(400);
-    });
-
     test('if hasEquity is not a boolean return 400', async () => {
         const resp = await request(app).get('/jobs?hasEquity=antarctica');
         expect(resp.statusCode).toBe(400);

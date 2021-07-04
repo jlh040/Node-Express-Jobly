@@ -52,14 +52,19 @@ try {
 */
 
 router.get("/", async function (req, res, next) {
-    try {      
-      const validator = jsonschema.validate(req.query, findJobSchema);
+    try {
+      if (req.query.minSalary) req.query.minSalary = +req.query.minSalary;
+      if (req.query.hasEquity === 'false' ) req.query.hasEquity = false;
+      if (req.query.hasEquity === 'true') req.query.hasEquity = true;
+          
+    
+      const validator = jsonschema.validate({...req.query}, findJobSchema);
       if (!validator.valid) {
         const errs = validator.errors.map(e => e.stack);
         throw new BadRequestError(errs);
       }
-  
-      const jobs = await Job.findAll({});
+
+      const jobs = await Job.findAll({ title: req.query.title, minSalary: req.query.minSalary, hasEquity: req.query.hasEquity });
       return res.json({ jobs });
     } catch (err) {
       return next(err);
