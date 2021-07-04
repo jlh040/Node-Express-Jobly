@@ -5,6 +5,7 @@ process.env.NODE_ENV = 'test';
 const { BadRequestError } = require('../expressError');
 const { sqlForPartialUpdate } = require('./sql.js');
 const { sqlForFilteredCompanies } = require('./sql.js');
+const { sqlForFilteredJobs } = require('./sql.js');
 
 /*******************************  Tests for sqlForPartialUpdate */
 
@@ -80,5 +81,29 @@ describe('sqlForFilteredCompanies', () => {
 
     test('returns correct query for all three arguments', () => {
         expect(sqlForFilteredCompanies({name: 'facebook', minEmployees: 240, maxEmployees: 910})).toEqual(`SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%facebook%' AND num_employees >= 240 AND num_employees <= 910`);
+    })
+});
+
+/*******************************  Tests for sqlForFilteredJobs */
+
+describe('sqlForFilteredJobs', () => {
+    test('should return a string', () => {
+        expect(sqlForFilteredJobs({title: 'electrician', minSalary: 20000, hasEquity: false})).toEqual(expect.any(String));
+    });
+
+    test('returns correct query for only one argument', () => {
+        expect(sqlForFilteredJobs({title: 'plumber'})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE title ILIKE '%plumber%'`);
+        expect(sqlForFilteredJobs({minSalary: 30000})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE salary >= 30000`);
+        expect(sqlForFilteredJobs({hasEquity: true})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE equity > 0`);
+    });
+
+    test('returns correct query for only two arguments', () => {
+        expect(sqlForFilteredJobs({title: 'Software Developer', minSalary: 10000})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE title ILIKE '%Software Developer%' AND salary >= 10000`);
+        expect(sqlForFilteredJobs({minSalary: 100000, hasEquity: true})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE salary >= 100000 AND equity > 0`);
+
+    });
+
+    test('returns correct query for all three arguments', () => {
+        expect(sqlForFilteredJobs({title: 'landscaper', minSalary: 40000, hasEquity: true})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE title ILIKE '%landscaper%' AND salary >= 40000 AND equity > 0`);
     })
 });
