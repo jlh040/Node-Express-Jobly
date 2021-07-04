@@ -105,5 +105,13 @@ describe('sqlForFilteredJobs', () => {
 
     test('returns correct query for all three arguments', () => {
         expect(sqlForFilteredJobs({title: 'landscaper', minSalary: 40000, hasEquity: true})).toEqual(`SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE title ILIKE '%landscaper%' AND salary >= 40000 AND equity > 0`);
-    })
+    });
+
+    test('if hasEquity is not provided, do not include equity in the SQL', () => {
+        expect(sqlForFilteredJobs({title: 'fireman', minSalary: 5000})).not.toContain('equity > 0');
+    });
+
+    test('if hasEquity is false, do not include equity in the SQL', () => {
+        expect(sqlForFilteredJobs({title: 'fireman', minSalary: 5000, hasEquity: false})).not.toContain('equity > 0');
+    });
 });
