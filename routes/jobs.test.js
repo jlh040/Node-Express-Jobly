@@ -267,5 +267,20 @@ describe('PATCH /jobs/:id', () => {
             companyHandle: "c1",
           },
         });
-      });
+    });
+
+    test("a non-admin cannot update a job", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .patch(`/jobs/${id}`)
+            .send({
+              equity: 0.34,
+            })
+            .set("authorization", `Bearer ${u2Token}`);
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    
 })
