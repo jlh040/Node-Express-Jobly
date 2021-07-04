@@ -109,104 +109,114 @@ describe('GET /jobs', () => {
         });
     });
 
-    // test('a user is able to search by job title', async () => {
-    //     const resp = await request(app).get('/jobs?title=c2Job')
-    //     expect(resp.body).toEqual({
-    //       jobs: [
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c2Job",
-    //             salary: 50000,
-    //             equity: '0.75',
-    //             companyHandle: "c2"
-    //         }
-    //       ]
-    //     })
-    // });
+    test('a user is able to search by job title', async () => {
+        const resp = await request(app).get('/jobs?title=c2')
+        expect(resp.body).toEqual({
+          jobs: [
+            {
+                id: expect.any(Number),
+                title: "c2Job",
+                salary: 50000,
+                equity: '0.75',
+                companyHandle: "c2"
+            }
+          ]
+        })
+    });
 
-    // test('a user is able to search by minSalary', async () => {
-    //     const resp = await request(app).get('/jobs?minSalary=80000')
-    //     expect(resp.body).toEqual({
-    //       jobs: [
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c3Job",
-    //             salary: 80000,
-    //             equity: '0.97',
-    //             companyHandle: "c3"
-    //         }
-    //       ]
-    //     })
-    // });
+    test('a user is able to search by minSalary', async () => {
+        const resp = await request(app).get('/jobs?minSalary=80000')
+        expect(resp.body).toEqual({
+          jobs: [
+            {
+                id: expect.any(Number),
+                title: "c3Job",
+                salary: 80000,
+                equity: '0.97',
+                companyHandle: "c3"
+            }
+          ]
+        })
+    });
 
-    // test('a user is able to search by hasEquity', async () => {
-    //     const resp = await request(app).get('/jobs?hasEquity=true')
-    //     expect(resp.body).toEqual({
-    //       jobs: [
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c2Job",
-    //             salary: 50000,
-    //             equity: '0.75',
-    //             companyHandle: "c2",
-    //         },
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c3Job",
-    //             salary: 80000,
-    //             equity: '0.97',
-    //             companyHandle: "c3",
-    //         },
-    //     ]
-    //     })
-    // });
+    test('a user is able to search by hasEquity', async () => {
+        const resp = await request(app).get('/jobs?hasEquity=true')
+        expect(resp.body).toEqual({
+          jobs: [
+            {
+                id: expect.any(Number),
+                title: "c2Job",
+                salary: 50000,
+                equity: '0.75',
+                companyHandle: "c2",
+            },
+            {
+                id: expect.any(Number),
+                title: "c3Job",
+                salary: 80000,
+                equity: '0.97',
+                companyHandle: "c3",
+            },
+        ]
+        })
+    });
 
-    // test('a user is able to search by hasEquity and minSalary', async () => {
-    //     const resp = await request(app).get('/jobs?hasEquity=true&minSalary=35000')
-    //     expect(resp.body).toEqual({
-    //       jobs: [
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c2Job",
-    //             salary: 50000,
-    //             equity: '0.75',
-    //             companyHandle: "c2",
-    //         },
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c3Job",
-    //             salary: 80000,
-    //             equity: '0.97',
-    //             companyHandle: "c3",
-    //         },
-    //     ]
-    //     })
-    // });
+    test('a user is able to search by hasEquity and minSalary', async () => {
+        const resp = await request(app).get('/jobs?hasEquity=true&minSalary=35000')
+        expect(resp.body).toEqual({
+          jobs: [
+            {
+                id: expect.any(Number),
+                title: "c2Job",
+                salary: 50000,
+                equity: '0.75',
+                companyHandle: "c2",
+            },
+            {
+                id: expect.any(Number),
+                title: "c3Job",
+                salary: 80000,
+                equity: '0.97',
+                companyHandle: "c3",
+            },
+        ]
+        })
+    });
 
-    // test('a user is able to search by title and minSalary', async () => {
-    //     const resp = await request(app).get('/jobs?title=c3Job&minSalary=70000')
-    //     expect(resp.body).toEqual({
-    //       jobs: [
-    //         {
-    //             id: expect.any(Number),
-    //             title: "c3Job",
-    //             salary: 80000,
-    //             equity: '0.97',
-    //             companyHandle: "c3",
-    //         }
-    //     ]
-    //     });
-    // });
+    test('a user is able to search by title and minSalary', async () => {
+        const resp = await request(app).get('/jobs?title=c3&minSalary=70000')
+        expect(resp.body).toEqual({
+          jobs: [
+            {
+                id: expect.any(Number),
+                title: "c3Job",
+                salary: 80000,
+                equity: '0.97',
+                companyHandle: "c3",
+            }
+        ]
+        });
+    });
 
-    // test('if minSalary is not a number return 400', async () => {
-    //     const resp = await request(app).get('/jobs?minSalary=hello');
-    //     expect(resp.statusCode).toBe(400);
-    // });
+    test('if minSalary is not a number return 400', async () => {
+        const resp = await request(app).get('/jobs?minSalary=hello');
+        expect(resp.statusCode).toBe(400);
+    });
 
-    // test('if invalid parameters are passed in the query string return 400', async () => {
-    //     const resp = await request(app).get('/jobs?igloo=polarbear&title=c3Job');
-    //     expect(resp.statusCode).toBe(400);
-    // });
+    test('if title is not a string return 400', async () => {
+        const resp = await request(app).get('/jobs?title=600');
+        expect(resp.statusCode).toBe(400);
+    });
+
+    test('if hasEquity is not a boolean return 400', async () => {
+        const resp = await request(app).get('/jobs?hasEquity=antarctica');
+        expect(resp.statusCode).toBe(400);
+    });
+
+    test('if invalid parameters are passed in the query string return 400', async () => {
+        const resp = await request(app).get('/jobs?igloo=polarbear&title=c3Job');
+        expect(resp.statusCode).toBe(400);
+    });
 
     test("fails: test next() handler", async function () {
         // there's no normal failure event which will cause this route to fail ---
