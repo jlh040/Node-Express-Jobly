@@ -375,5 +375,12 @@ describe('DELETE /jobs/:id', () => {
             .delete(`/jobs/${id}`)
         expect(resp.statusCode).toEqual(401);
     });
+
+    test("not found for no such job", async function () {
+        const resp = await request(app)
+            .delete(`/jobs/4002003001001`)
+            .set("authorization", `Bearer ${u2Token}`);
+        expect(resp.statusCode).toEqual(404);
+    });
 })
 
