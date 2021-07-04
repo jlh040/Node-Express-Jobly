@@ -294,5 +294,15 @@ describe('PATCH /jobs/:id', () => {
         expect(resp.statusCode).toEqual(401);
     });
 
+    test("not found on no such job", async function () {
+        const resp = await request(app)
+            .patch(`/jobs/900010000`)
+            .send({
+              title: "doesNotMatter",
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(404);
+      });
+
     
 })
