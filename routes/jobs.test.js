@@ -330,5 +330,31 @@ describe('PATCH /jobs/:id', () => {
         expect(resp.statusCode).toEqual(400);
     });
 
-    
+    test("bad request on invalid data", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .patch(`/jobs/${id}`)
+            .send({
+              minSalary: 'hello',
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(400);
+    });
+});
+
+/************************************** DELETE /jobs/:id */
+
+describe('DELETE /jobs/:id', () => {
+    test("an admin can delete a job", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .delete(`/jobs/${id}`)
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.body).toEqual({ deleted: id });
+    });
 })
+
