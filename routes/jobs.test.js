@@ -214,10 +214,15 @@ describe('GET /jobs', () => {
     //     });
     // });
 
-    test('if minSalary is not a number return 400', async () => {
-        const resp = await request(app).get('/jobs?minSalary=hello');
-        expect(resp.statusCode).toBe(400);
-    });
+    // test('if minSalary is not a number return 400', async () => {
+    //     const resp = await request(app).get('/jobs?minSalary=hello');
+    //     expect(resp.statusCode).toBe(400);
+    // });
+
+    // test('if invalid parameters are passed in the query string return 400', async () => {
+    //     const resp = await request(app).get('/jobs?igloo=polarbear&title=c3Job');
+    //     expect(resp.statusCode).toBe(400);
+    // });
 
 
 
