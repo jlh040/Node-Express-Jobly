@@ -238,4 +238,9 @@ describe('GET /jobs/:id', () => {
           },
         });
     });
+
+    test("not found for no such job", async function () {
+        const resp = await request(app).get(`/jobs/99000`);
+        expect(resp.statusCode).toEqual(404);
+    });
 })
