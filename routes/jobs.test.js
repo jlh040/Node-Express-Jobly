@@ -234,11 +234,24 @@ describe('GET /jobs', () => {
             .set("authorization", `Bearer ${u1Token}`);
         expect(resp.statusCode).toEqual(500);
     });
+});
 
+/************************************** GET /jobs/:id */
 
-
-
-
-
-
+describe('GET /jobs/:id', () => {
+    test("works for anon", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+        
+        const resp = await request(app).get(`/jobs/${id}`);
+        expect(resp.body).toEqual({
+          job: {
+            id: expect.any(Number),
+            title: "c1Job",
+            salary: 20000,
+            equity: '0',
+            companyHandle: "c1",
+          },
+        });
+    });
 })
