@@ -1,6 +1,7 @@
 "use strict";
 
 const db = require("../db");
+const Job = require('./job');
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate, sqlForFilteredCompanies } = require("../helpers/sql");
 
@@ -93,6 +94,9 @@ class Company {
     const company = companyRes.rows[0];
 
     if (!company) throw new NotFoundError(`No company: ${handle}`);
+
+    const jobs = await db.query(`SELECT id, title, salary, equity FROM jobs WHERE company_handle = $1`, [handle]);
+    company.jobs = jobs.rows;
 
     return company;
   }
