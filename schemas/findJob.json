@@ -8,16 +8,11 @@
     "examples": [
         {
             "title": "some words",
-            "salary": 80000,
-            "equity": 0.3,
-            "companyHandle": "someCompany"
+            "minSalary": 80000,
+            "hasEquity": true
         }
     ],
     "required": [
-        "title",
-        "salary",
-        "equity",
-        "companyHandle"
     ],
     "properties": {
         "title": {
@@ -30,10 +25,10 @@
                 "some words"
             ]
         },
-        "salary": {
-            "$id": "#/properties/salary",
+        "minSalary": {
+            "$id": "#/properties/minSalary",
             "type": "integer",
-            "title": "The salary schema",
+            "title": "The minSalary schema",
             "description": "An explanation about the purpose of this instance.",
             "minimum": 0,
             "default": 0,
@@ -41,28 +36,16 @@
                 80000
             ]
         },
-        "equity": {
-            "$id": "#/properties/equity",
-            "type": "number",
-            "title": "The equity schema",
+        "hasEquity": {
+            "$id": "#/properties/hasEquity",
+            "type": "boolean",
+            "title": "The hasEquity schema",
             "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
-            "minimum": 0,
-            "maximum": 1,
+            "default": false,
             "examples": [
-                0.3
-            ]
-        },
-        "companyHandle": {
-            "$id": "#/properties/companyHandle",
-            "type": "string",
-            "title": "The companyHandle schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "someCompany"
+                true
             ]
         }
     },
-    "additionalProperties": false
+    "additionalProperties": true
 }
