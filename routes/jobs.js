@@ -16,7 +16,7 @@ const findJobSchema = require('../schemas/findJob.json');
 const router = new express.Router();
 
 
-/** POST { job } => { job }
+/** POST / { job } => { job }
  * 
  * job should be { title, salary, equity, companyHandle }
  * 
@@ -39,6 +39,34 @@ const router = new express.Router();
         return next(err);
       }
  });
+
+ /** GET / => 
+  *     { jobs: [ { id, title, salary, equity, companyHandle }, ...] }
+  * 
+  * Can filter on provided search filters:
+  *     - title
+  *     - minSalary
+  *     - hasEquity
+  * 
+  * Authorization required: none
+ */
+
+router.get("/", async function (req, res, next) {
+    try {      
+      const validator = jsonschema.validate(req.query, findJobSchema);
+      if (!validator.valid) {
+        const errs = validator.errors.map(e => e.stack);
+        throw new BadRequestError(errs);
+      }
+  
+      const jobs = await Job.findAll({});
+      return res.json({ jobs });
+    } catch (err) {
+      return next(err);
+    }
+  });
+
+
 
  
 
