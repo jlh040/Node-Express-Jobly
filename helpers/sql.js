@@ -58,6 +58,14 @@ function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
   return baseQuery;
 }
 
+/* Pass in arguments referring to how we should search for jobs, and returns a SQL statement which
+*  makes that exact search in the database.
+*
+* E.G: 
+*  {title: 'CEO', hasEquity: true} => 
+*  'SELECT id, title, salary, equity, company_handle AS 'companyHandle' FROM jobs WHERE title ILIKE '%CEO%' AND equity > 0`
+*/
+
 function sqlForFilteredJobs({title, minSalary, hasEquity}) {
   let baseQuery = `SELECT id, title, salary, equity, company_handle AS "companyHandle" FROM jobs WHERE`;
   let arrOfKeyAndVal = [];
@@ -69,7 +77,7 @@ function sqlForFilteredJobs({title, minSalary, hasEquity}) {
     if (arguments[0][key] !== undefined && arguments[0][key] !== false) arrOfKeyAndVal.push(`${key} = '${arguments[0][key]}'`);
   }
 
-  // create array of sql clauses
+  // create array of SQL clauses
   arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {
     if (clause.includes('title')) return `title ILIKE '%${title}%'`;
     else if (clause.includes('minSalary')) return `salary >= ${minSalary}`;

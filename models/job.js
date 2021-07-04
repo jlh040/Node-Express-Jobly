@@ -46,9 +46,9 @@ class Job {
    * Returns [{ id, title, salary, equity, companyHandle }, ...]
    * */
 
-  static async findAll({name, minEmployees, maxEmployees}) {
+  static async findAll({ title, minSalary, hasEquity }) {
     let query;
-    if (name === undefined && minEmployees === undefined && maxEmployees === undefined) {
+    if (title === undefined && minSalary === undefined && hasEquity === undefined) {
       query = `SELECT id,
                       title,
                       salary,
@@ -57,7 +57,7 @@ class Job {
               FROM jobs
               ORDER BY title`
     } else {
-      query = sqlForFilteredCompanies({name, minEmployees, maxEmployees});
+      query = sqlForFilteredJobs({ title, minSalary, hasEquity});
     }
 
     const jobsRes = await db.query(query);
