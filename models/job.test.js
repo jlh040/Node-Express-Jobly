@@ -27,7 +27,7 @@ describe('create', () => {
 
   test('works', async () => {
     let job = await Job.create(newJob);
-    expect(job).toEqual(newJob);
+    expect(job).toEqual({ id: expect.any(Number), ...newJob});
 
     const result = await db.query(
       `SELECT id, title, salary, equity, company_handle

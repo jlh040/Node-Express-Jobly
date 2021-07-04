@@ -382,5 +382,4 @@ describe('DELETE /jobs/:id', () => {
             .set("authorization", `Bearer ${u2Token}`);
         expect(resp.statusCode).toEqual(404);
     });
-})
-
+});
