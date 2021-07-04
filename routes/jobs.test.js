@@ -214,6 +214,11 @@ describe('GET /jobs', () => {
     //     });
     // });
 
+    test('if minSalary is not a number return 400', async () => {
+        const resp = await request(app).get('/jobs?minSalary=hello');
+        expect(resp.statusCode).toBe(400);
+    });
+
 
 
 
