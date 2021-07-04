@@ -82,7 +82,7 @@ router.get("/:id", async function (req, res, next) {
     }
 });
 
-/** PATCH /id { fld1, fld2, ... } => { job }
+/** PATCH /:id { fld1, fld2, ... } => { job }
  *
  * Patches job data.
  *
@@ -105,6 +105,20 @@ router.patch('/:id', ensureLoggedIn, async (req, res, next) => {
         return res.json({ job });
     } catch (err) {
         return next(err);
+    }
+});
+
+/** DELETE /:id  =>  { deleted: id } 
+ * 
+ * Authorization: admin
+*/
+
+router.delete("/:id", ensureLoggedIn, async function (req, res, next) {
+    try {
+      await Job.remove(req.params.id);
+      return res.json({ deleted: req.params.id });
+    } catch (err) {
+      return next(err);
     }
 });
 
