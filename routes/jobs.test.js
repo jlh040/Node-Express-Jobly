@@ -125,6 +125,21 @@ describe('GET /jobs', () => {
         });
     });
 
+    // test('a user is able to search by job title', async () => {
+    //     const resp = await request(app).get('/jobs?title=c2Job')
+    //     expect(resp.body).toEqual({
+    //       jobs: [
+    //         {
+    //             id: expect.any(Number),
+    //             title: "c2Job",
+    //             salary: 50000,
+    //             equity: '0.75',
+    //             companyHandle: "c2"
+    //         }
+    //       ]
+    //     })
+    // });
+
 
 
 
