@@ -224,6 +224,17 @@ describe('GET /jobs', () => {
     //     expect(resp.statusCode).toBe(400);
     // });
 
+    test("fails: test next() handler", async function () {
+        // there's no normal failure event which will cause this route to fail ---
+        // thus making it hard to test that the error-handler works with it. This
+        // should cause an error, all right :)
+        await db.query("DROP TABLE jobs CASCADE");
+        const resp = await request(app)
+            .get("/jobs")
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(500);
+    });
+
 
 
 
