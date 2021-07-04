@@ -47,5 +47,5 @@
             ]
         }
     },
-    "additionalProperties": true
+    "additionalProperties": false
 }
