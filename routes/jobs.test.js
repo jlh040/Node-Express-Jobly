@@ -302,7 +302,20 @@ describe('PATCH /jobs/:id', () => {
             })
             .set("authorization", `Bearer ${u1Token}`);
         expect(resp.statusCode).toEqual(404);
-      });
+    });
+
+    test("bad request on id change attempt", async function () {
+        const result = await db.query(`SELECT id FROM jobs WHERE title = 'c1Job'`)
+        const id = result.rows[0].id;
+
+        const resp = await request(app)
+            .patch(`/jobs/${id}`)
+            .send({
+              id: 850,
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+        expect(resp.statusCode).toEqual(400);
+    });
 
     
 })
