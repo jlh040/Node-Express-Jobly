@@ -62,7 +62,16 @@ describe('POST /jobs', function() {
             })
             .set("authorization", `Bearer ${u1Token}`);
         expect(resp.statusCode).toEqual(400);
-      });
+    });
 
-
+    test("bad request with invalid data", async function () {
+    const resp = await request(app)
+        .post("/jobs")
+        .send({
+            ...newJob,
+            salary: "not-a-number",
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(400);
+    });
 })
