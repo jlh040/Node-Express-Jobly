@@ -234,7 +234,7 @@ describe("remove", function () {
 describe('apply', function() {
   test('returns correct JSON', async () => {
     const username = 'u1';
-    const res = await db.query(`SELECT id FROM jobs WHERE title ='c1job'`);
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
     const jobId = res.rows[0].id;
 
     const result = await User.apply(username, jobId);
@@ -243,7 +243,7 @@ describe('apply', function() {
 
   test('inserts job application into db', async () => {
     const username = 'u2';
-    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
     const jobId = res.rows[0].id;
 
     await User.apply(username, jobId);
@@ -254,7 +254,7 @@ describe('apply', function() {
 
   test('throws an error if that application already exists', async () => {
     const username = 'u2';
-    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
     const jobId = res.rows[0].id;
     try {
       await User.apply(username, jobId);
@@ -267,7 +267,7 @@ describe('apply', function() {
   });
 
   test('throws an error if that user does not exist', async () => {
-    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
     const jobId = res.rows[0].id;
     try {
       await User.apply('non-existential', jobId);
