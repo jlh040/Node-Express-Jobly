@@ -395,7 +395,7 @@ describe('POST /users/:username/jobs/:id', () => {
       .post(`/users/u2/jobs/${id}`)
       .set('authorization', `Bearer ${u1Token}`);
     
-    expect(resp.rows[0]).toEqual({applied: id});
+    expect(resp.body).toEqual({applied: id});
   });
 
   test('a non-admin cannot apply another user for a job', async () => {
@@ -427,22 +427,22 @@ describe('POST /users/:username/jobs/:id', () => {
       .post(`/users/u2/jobs/${id}`)
       .set('authorization', `Bearer ${u2Token}`);
     
-    expect(resp.rows[0]).toEqual({applied: id});
+    expect(resp.body).toEqual({applied: id});
   });
 
   test('400 if the application already exists', async () => {
     const result = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
     const id = result.rows[0].id;
 
-    const resp = await request(app)
+    await request(app)
       .post(`/users/u2/jobs/${id}`)
       .set('authorization', `Bearer ${u1Token}`);
 
-    const resp2 = await request(app)
+    const resp = await request(app)
       .post(`/users/u2/jobs/${id}`)
       .set('authorization', `Bearer ${u1Token}`);
     
-    expect(resp2.statusCode).toEqual(400);
+    expect(resp.statusCode).toEqual(400);
   });
 
   test('404 if the user cannot be found', async () => {

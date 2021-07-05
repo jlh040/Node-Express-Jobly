@@ -24,7 +24,7 @@ const router = express.Router();
  * This returns the newly created user and an authentication token for them:
  *  {user: { username, firstName, lastName, email, isAdmin }, token }
  *
- * Authorization required: login
+ * Authorization required: admin
  **/
 
 router.post("/", ensureLoggedIn, async function (req, res, next) {
@@ -48,7 +48,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns list of all users.
  *
- * Authorization required: login
+ * Authorization required: admin
  **/
 
 router.get("/", ensureLoggedIn, async function (req, res, next) {
@@ -65,7 +65,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns { username, firstName, lastName, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: admin
  **/
 
 router.get("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -85,7 +85,7 @@ router.get("/:username", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns { username, firstName, lastName, email, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: admin
  **/
 
 router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -106,7 +106,7 @@ router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
 
 /** DELETE /[username]  =>  { deleted: username }
  *
- * Authorization required: login
+ * Authorization required: admin
  **/
 
 router.delete("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -118,5 +118,26 @@ router.delete("/:username", ensureLoggedIn, async function (req, res, next) {
   }
 });
 
+/** POST /:username/jobs/:id  =>  { applied: jobId }
+ *
+ * Allows a user to apply for one of the jobs in the database.
+ * 
+ * username is the name of the user that will apply for a job
+ * id is the id of the job that the user is applying for
+ *
+ * If the application was successful, should return an object containing the job id in the URL
+ *
+ * Authorization required: admin
+ **/
+
+router.post('/:username/jobs/:id', ensureLoggedIn, async (req, res, next) => {
+  try {
+    await User.apply(req.params.username, req.params.id);
+    return res.json({applied: +req.params.id});
+  }
+  catch(err) {
+    return next(err);
+  }
+});
 
 module.exports = router;
