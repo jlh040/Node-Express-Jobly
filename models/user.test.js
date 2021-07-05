@@ -228,3 +228,19 @@ describe("remove", function () {
     }
   });
 });
+
+/************************************** apply */
+
+describe('apply', function() {
+  test('returns correct JSON', async () => {
+    const username = 'u1';
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c1job'`);
+    const jobId = res.rows[0].id;
+
+    const result = await User.apply(username, jobId);
+    expect(result).toEqual( { applied: jobId } );
+  });
+
+  
+})
+

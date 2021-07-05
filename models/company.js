@@ -1,7 +1,6 @@
 "use strict";
 
 const db = require("../db");
-const Job = require('./job');
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate, sqlForFilteredCompanies } = require("../helpers/sql");
 
