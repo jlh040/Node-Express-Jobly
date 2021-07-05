@@ -456,7 +456,11 @@ describe('POST /users/:username/jobs/:id', function() {
     expect(resp.statusCode).toEqual(404);
   });
 
-  
-
-
+  test('404 if the job cannot be found', async () => {
+    const resp = await request(app)
+      .post(`/users/u1/jobs/999992`)
+      .set('authorization', `Bearer ${u1token}`);
+    
+    expect(resp.statusCode).toEqual(404);
+  });
 });
