@@ -278,6 +278,15 @@ describe('apply', function() {
     }
   });
 
-
-})
+  test('throws an error if that job does not exist', async () => {
+    const username = 'u2'
+    try {
+      await User.apply(username, -7);
+      fail();
+    }
+    catch(err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
 

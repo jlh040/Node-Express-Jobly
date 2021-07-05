@@ -204,6 +204,39 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
+
+  /** Allows a user to apply for a job;
+ * 
+ * Accepts the username of the user, and the job id for the job they're applying for 
+ * 
+ * Returns { applied: jobId } (where jobId is the job the user applied for)
+ * 
+*/
+
+static async apply(username, jobId) {
+  const duplicateCheck = await db.query(
+    `SELECT username, job_id
+     FROM applications
+     WHERE username = $1 AND job_id = $2`,
+    [username, jobId],
+  );
+
+  if (duplicateCheck.rows[0]) {
+    throw new BadRequestError(`${username} already applied for the job with an id of ${jobId}`);
+  };
+
+  
+
+
+
+
+
+}
+
+
+
+
+
 }
 
 
