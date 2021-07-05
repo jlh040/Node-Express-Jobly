@@ -398,6 +398,17 @@ describe('POST /users/:username/jobs/:id', function() {
     expect(resp.rows[0]).toEqual({applied: id});
   });
 
+  test('a non-admin cannot apply another user for a job', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c3Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/u1/jobs/${id}`)
+      .set('authorization', `Bearer ${u2token}`);
+    
+    expect(resp.statusCode).toBe(401);
+  });
+
   test('an anonymous user cannot apply for a job', async () => {
     const result = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
     const id = result.rows[0].id;
