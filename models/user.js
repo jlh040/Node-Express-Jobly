@@ -2,6 +2,7 @@
 
 const db = require("../db");
 const bcrypt = require("bcrypt");
+const Job = require('./job');
 const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
   NotFoundError,
@@ -213,31 +214,29 @@ class User {
  * 
 */
 
-static async apply(username, jobId) {
-  const duplicateCheck = await db.query(
-    `SELECT username, job_id
-     FROM applications
-     WHERE username = $1 AND job_id = $2`,
-    [username, jobId],
-  );
+  static async apply(username, jobId) {
+    const duplicateCheck = await db.query(
+      `SELECT username, job_id
+      FROM applications
+      WHERE username = $1 AND job_id = $2`,
+      [username, jobId],
+    );
 
-  if (duplicateCheck.rows[0]) {
-    throw new BadRequestError(`${username} already applied for the job with an id of ${jobId}`);
+    if (duplicateCheck.rows[0]) {
+      throw new BadRequestError(`${username} already applied for the job with an id of ${jobId}`);
+    };
+
+    // check for user and job, if not found, they will throw errors
+    await this.get(username);
+    await Job.get(jobId);
+
+    const result = await db.query(`
+      INSERT INTO applications (username, job_id)
+      VALUES ($1, $2)`, [username, jobId]);
+    
+    return { applied: jobId};
   };
-
-  
-
-
-
-
-
-}
-
-
-
-
-
-}
+;}
 
 
 module.exports = User;
