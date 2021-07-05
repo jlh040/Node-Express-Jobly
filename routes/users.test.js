@@ -392,11 +392,49 @@ describe('POST /users/:username/jobs/:id', function() {
     const id = result.rows[0].id;
 
     const resp = await request(app)
-      .post(`/users/c2/jobs/${id}`)
+      .post(`/users/u2/jobs/${id}`)
       .set('authorization', `Bearer ${u1token}`);
     
     expect(resp.rows[0]).toEqual({applied: id});
-  })
+  });
+
+  test('an anonymous user cannot apply for a job', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/u2/jobs/${id}`)
+    
+    expect(resp.statusCode).toBe(401);
+  });
+
+  test('a non-admin can apply themselves for a job', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c3Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/u2/jobs/${id}`)
+      .set('authorization', `Bearer ${u2token}`);
+    
+    expect(resp.rows[0]).toEqual({applied: id});
+  });
+
+  test('400 if the application already exists', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/u2/jobs/${id}`)
+      .set('authorization', `Bearer ${u1token}`);
+
+    const resp2 = await request(app)
+      .post(`/users/u2/jobs/${id}`)
+      .set('authorization', `Bearer ${u1token}`);
+    
+    expect(resp2.statusCode).toEqual(400);
+  });
+
+  
 
 
 });
