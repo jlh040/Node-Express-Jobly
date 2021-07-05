@@ -241,6 +241,43 @@ describe('apply', function() {
     expect(result).toEqual( { applied: jobId } );
   });
 
-  
+  test('inserts job application into db', async () => {
+    const username = 'u2';
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const jobId = res.rows[0].id;
+
+    await User.apply(username, jobId);
+    
+    const result = await db.query(`SELECT username, job_id FROM applications WHERE username = 'u2'`);
+    expect(result.rows[0]).toEqual({username: 'u2', job_id: jobId});
+  });
+
+  test('throws an error if that application already exists', async () => {
+    const username = 'u2';
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const jobId = res.rows[0].id;
+    try {
+      await User.apply(username, jobId);
+      await User.apply(username, jobId);
+      fail();
+    }
+    catch(err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+
+  test('throws an error if that user does not exist', async () => {
+    const res = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const jobId = res.rows[0].id;
+    try {
+      await User.apply('non-existential', jobId);
+      fail();
+    }
+    catch(err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
+
 })
 
