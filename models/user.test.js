@@ -140,6 +140,17 @@ describe("get", function () {
       lastName: "U1L",
       email: "u1@email.com",
       isAdmin: false,
+      jobs: [expect.any(Number)]
+    });
+
+    let user2 = await User.get("u2");
+    expect(user2).toEqual({
+      username: "u2",
+      firstName: "U2F",
+      lastName: "U2L",
+      email: "u2@email.com",
+      isAdmin: false,
+      jobs: [expect.any(Number)]
     });
   });
 
