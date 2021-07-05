@@ -383,3 +383,20 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+/************************************** POST /users/:username/jobs/:id */
+
+describe('POST /users/:username/jobs/:id', function() {
+  test('an admin can apply another user for a job', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/c2/jobs/${id}`)
+      .set('authorization', `Bearer ${u1token}`);
+    
+    expect(resp.rows[0]).toEqual({applied: id});
+  })
+
+
+});
