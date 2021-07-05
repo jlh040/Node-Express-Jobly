@@ -386,14 +386,14 @@ describe("DELETE /users/:username", function () {
 
 /************************************** POST /users/:username/jobs/:id */
 
-describe('POST /users/:username/jobs/:id', function() {
+describe('POST /users/:username/jobs/:id', () => {
   test('an admin can apply another user for a job', async () => {
     const result = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
     const id = result.rows[0].id;
 
     const resp = await request(app)
       .post(`/users/u2/jobs/${id}`)
-      .set('authorization', `Bearer ${u1token}`);
+      .set('authorization', `Bearer ${u1Token}`);
     
     expect(resp.rows[0]).toEqual({applied: id});
   });
@@ -404,7 +404,7 @@ describe('POST /users/:username/jobs/:id', function() {
 
     const resp = await request(app)
       .post(`/users/u1/jobs/${id}`)
-      .set('authorization', `Bearer ${u2token}`);
+      .set('authorization', `Bearer ${u2Token}`);
     
     expect(resp.statusCode).toBe(401);
   });
@@ -425,7 +425,7 @@ describe('POST /users/:username/jobs/:id', function() {
 
     const resp = await request(app)
       .post(`/users/u2/jobs/${id}`)
-      .set('authorization', `Bearer ${u2token}`);
+      .set('authorization', `Bearer ${u2Token}`);
     
     expect(resp.rows[0]).toEqual({applied: id});
   });
@@ -436,11 +436,11 @@ describe('POST /users/:username/jobs/:id', function() {
 
     const resp = await request(app)
       .post(`/users/u2/jobs/${id}`)
-      .set('authorization', `Bearer ${u1token}`);
+      .set('authorization', `Bearer ${u1Token}`);
 
     const resp2 = await request(app)
       .post(`/users/u2/jobs/${id}`)
-      .set('authorization', `Bearer ${u1token}`);
+      .set('authorization', `Bearer ${u1Token}`);
     
     expect(resp2.statusCode).toEqual(400);
   });
@@ -451,7 +451,7 @@ describe('POST /users/:username/jobs/:id', function() {
 
     const resp = await request(app)
       .post(`/users/notAUser/jobs/${id}`)
-      .set('authorization', `Bearer ${u1token}`);
+      .set('authorization', `Bearer ${u1Token}`);
     
     expect(resp.statusCode).toEqual(404);
   });
@@ -459,7 +459,7 @@ describe('POST /users/:username/jobs/:id', function() {
   test('404 if the job cannot be found', async () => {
     const resp = await request(app)
       .post(`/users/u1/jobs/999992`)
-      .set('authorization', `Bearer ${u1token}`);
+      .set('authorization', `Bearer ${u1Token}`);
     
     expect(resp.statusCode).toEqual(404);
   });
