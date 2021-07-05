@@ -445,6 +445,17 @@ describe('POST /users/:username/jobs/:id', function() {
     expect(resp2.statusCode).toEqual(400);
   });
 
+  test('404 if the user cannot be found', async () => {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c3Job'`);
+    const id = result.rows[0].id;
+
+    const resp = await request(app)
+      .post(`/users/notAUser/jobs/${id}`)
+      .set('authorization', `Bearer ${u1token}`);
+    
+    expect(resp.statusCode).toEqual(404);
+  });
+
   
 
 
