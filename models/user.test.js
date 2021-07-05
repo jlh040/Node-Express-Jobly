@@ -133,6 +133,10 @@ describe("findAll", function () {
 
 describe("get", function () {
   test("works", async function () {
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c1job'`);
+    const jobId = result.rows[0].id
+    await User.apply('u1', jobId)
+
     let user = await User.get("u1");
     expect(user).toEqual({
       username: "u1",
@@ -140,8 +144,12 @@ describe("get", function () {
       lastName: "U1L",
       email: "u1@email.com",
       isAdmin: false,
-      jobs: [expect.any(Number)]
+      jobs: [jobId]
     });
+
+    const result2 = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const jobId2 = result2.rows[0].id
+    await User.apply('u2', jobId2)
 
     let user2 = await User.get("u2");
     expect(user2).toEqual({
@@ -150,7 +158,7 @@ describe("get", function () {
       lastName: "U2L",
       email: "u2@email.com",
       isAdmin: false,
-      jobs: [expect.any(Number)]
+      jobs: [jobId2]
     });
   });
 
