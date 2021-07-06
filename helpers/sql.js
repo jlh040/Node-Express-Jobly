@@ -1,4 +1,5 @@
 const { BadRequestError } = require("../expressError");
+const sqlString = require('sqlstring');
 
 /* Pass in data to update and an object containing js keywords with values as their SQL analog
 *  and it will return an object containing {setCols: string with proper SQL keywords, 
@@ -46,9 +47,9 @@ function sqlForFilteredCompanies({name, minEmployees, maxEmployees}) {
 
   // create array of sql clauses
   arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {
-    if (clause.includes('name')) return `name ILIKE '%${name}%'`;
-    else if (clause.includes('minEmployees')) return `num_employees >= ${minEmployees}`;
-    else if (clause.includes('maxEmployees')) return `num_employees <= ${maxEmployees}`;
+    if (clause.includes('name')) return `name ILIKE ${sqlString.escape('%' + name + '%')}`;
+    else if (clause.includes('minEmployees')) return `num_employees >= ${+sqlString.escape(minEmployees)}`;
+    else if (clause.includes('maxEmployees')) return `num_employees <= ${+sqlString.escape(maxEmployees)}`;
   });
 
   // attach either the concatenated string, or the single array item to the end of: SELECT * FROM companies WHERE
@@ -79,8 +80,8 @@ function sqlForFilteredJobs({title, minSalary, hasEquity}) {
 
   // create array of SQL clauses
   arrOfKeyAndVal = arrOfKeyAndVal.map(clause => {
-    if (clause.includes('title')) return `title ILIKE '%${title}%'`;
-    else if (clause.includes('minSalary')) return `salary >= ${minSalary}`;
+    if (clause.includes('title')) return `title ILIKE ${sqlString.escape('%' + title + '%')}`;
+    else if (clause.includes('minSalary')) return `salary >= ${+sqlString.escape(minSalary)}`;
     else if (clause.includes('hasEquity')) return `equity > 0`;
   });
 
