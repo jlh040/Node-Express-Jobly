@@ -91,9 +91,9 @@ router.get("/:handle", async function (req, res, next) {
  *
  * Patches company data.
  *
- * fields can be: { name, description, numEmployees, logo_url }
+ * fields can be: { name, description, numEmployees, logoUrl }
  *
- * Returns { handle, name, description, numEmployees, logo_url }
+ * Returns { handle, name, description, numEmployees, logoUrl }
  *
  * Authorization required: admin
  */
