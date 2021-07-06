@@ -45,6 +45,12 @@ Most of these routes require admin privileges. To get yourself admin privileges,
 - This route is for admins to sign a user up, with this route an admin can sign a user up as an admin.
 - ***Route is for admins only***
 
+### POST /users/:username/jobs/:id
+
+- Returns { applied: jobId }
+- This route is for a user with a username of **:username** to sign up for the job with an id of **:id**.
+- ***Route is for admins only***
+
 ### GET /users
 
 - Returns list of all users
