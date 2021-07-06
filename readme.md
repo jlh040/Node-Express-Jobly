@@ -1,6 +1,6 @@
 # Jobly Backend
 
-This is the Express backend for Jobly.
+This is the Express backend for Jobly. It is tested with unit and integration tests.
 
 To download this code, run `git clone https://github.com/jlh040/Node-Express-Jobly.git`
 
