@@ -133,7 +133,7 @@ describe("findAll", function () {
 
 describe("get", function () {
   test("works", async function () {
-    const result = await db.query(`SELECT id FROM jobs WHERE title ='c1job'`);
+    const result = await db.query(`SELECT id FROM jobs WHERE title ='c1Job'`);
     const jobId = result.rows[0].id
     await User.apply('u1', jobId)
 
@@ -147,7 +147,7 @@ describe("get", function () {
       jobs: [jobId]
     });
 
-    const result2 = await db.query(`SELECT id FROM jobs WHERE title ='c2job'`);
+    const result2 = await db.query(`SELECT id FROM jobs WHERE title ='c2Job'`);
     const jobId2 = result2.rows[0].id
     await User.apply('u2', jobId2)
 

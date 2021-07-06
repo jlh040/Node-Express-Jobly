@@ -229,15 +229,18 @@ class User {
       throw new BadRequestError(`${username} already applied for the job with an id of ${jobId}`);
     };
 
-    // check for user and job, if not found, they will throw errors
-    await this.get(username);
+    // check for user
+    const result = await db.query(`SELECT username FROM users WHERE username = $1`, [username]);
+    if (!result.rows[0]) throw new NotFoundError(`User with username of: ${username} not found`)
+
+    // check for job
     await Job.get(jobId);
 
-    const result = await db.query(`
+    await db.query(`
       INSERT INTO applications (username, job_id)
       VALUES ($1, $2)`, [username, jobId]);
     
-    return { applied: jobId};
+    return { applied: jobId };
   };
 ;}
 
