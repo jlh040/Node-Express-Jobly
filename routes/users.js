@@ -63,7 +63,10 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
 
 /** GET /[username] => { user }
  *
- * Returns { username, firstName, lastName, isAdmin }
+ * Returns { username, firstName, lastName, email, isAdmin, jobs }
+ * 
+ * In the response object, jobs is [ jobId, jobId, ... ], which are the ids
+ * of the jobs that the user applied for.
  *
  * Authorization required: admin
  **/

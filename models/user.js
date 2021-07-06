@@ -132,7 +132,7 @@ class User {
                   email,
                   is_admin AS "isAdmin",
                   json_agg(job_id) AS "jobs"
-           FROM users JOIN applications
+           FROM users LEFT JOIN applications
            ON users.username = applications.username
            WHERE users.username = $1
            GROUP BY users.username`,

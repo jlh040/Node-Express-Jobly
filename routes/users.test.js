@@ -190,6 +190,12 @@ describe("GET /users", function () {
 
 describe("GET /users/:username", function () {
   test("an admin can get information about a user", async function () {
+    const result = await db.query(`SELECT id FROM jobs WHERE title = 'c2Job'`);
+    const jobId = result.rows[0].id;
+
+    await request(app).post(`/users/u3/jobs/${jobId}`)
+      .set("authorization", `Bearer ${u1Token}`);
+
     const resp = await request(app)
         .get(`/users/u3`)
         .set("authorization", `Bearer ${u1Token}`);
@@ -201,6 +207,7 @@ describe("GET /users/:username", function () {
         lastName: "U3L",
         email: "user3@user.com",
         isAdmin: false,
+        jobs: [jobId]
       },
     });
   });
@@ -225,6 +232,7 @@ describe("GET /users/:username", function () {
         lastName: "U2L",
         email: "user2@user.com",
         isAdmin: false,
+        jobs: [null]
       }
     })
   })
